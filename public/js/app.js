@@ -1787,6 +1787,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1830,9 +1842,36 @@ __webpack_require__.r(__webpack_exports__);
       });
       return;
     },
+    showContact: function showContact(id) {
+      var self = this;
+      axios.get("api/contact/" + id).then(function (res) {
+        self.contact.id = res.data.id;
+        self.contact.name = res.data.name;
+        self.contact.email = res.data.email;
+        self.contact.phone = res.data.phone;
+      });
+      self.edit = true;
+    },
     updateContact: function updateContact(id) {
-      console.log("update" + id);
+      var self = this;
+      var params = Object.assign({}, self.contact);
+      axios.patch("api/contact/" + id, params).then(function (res) {
+        self.contact.name = "";
+        self.contact.email = "";
+        self.contact.phone = "";
+        self.edit = false;
+        self.fetchContactList();
+      })["catch"](function (err) {
+        return console.loge(err);
+      });
       return;
+    },
+    deleteContact: function deleteContact(id) {
+      var _this2 = this;
+
+      axios["delete"]("api/contact/" + id).then(function (res) {
+        _this2.fetchContactList();
+      });
     }
   }
 });
@@ -37128,7 +37167,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("dir", [
+  return _c("div", [
     _c("h1", [_vm._v("Contacts")]),
     _vm._v(" "),
     _c(
@@ -37257,6 +37296,51 @@ var render = function() {
           )
         ])
       ]
+    ),
+    _vm._v(" "),
+    _c("h1", [_vm._v("Contacts")]),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "list-group" },
+      _vm._l(_vm.list, function(contact) {
+        return _c("li", { staticClass: "list-group-item" }, [
+          _c("strong", [_vm._v(_vm._s(contact.name))]),
+          _vm._v(
+            "\n      " +
+              _vm._s(contact.email) +
+              " " +
+              _vm._s(contact.phone) +
+              "\n      "
+          ),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-info btn-lg",
+              on: {
+                click: function($event) {
+                  return _vm.showContact(contact.id)
+                }
+              }
+            },
+            [_vm._v("Edit")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger btn-lg",
+              on: {
+                click: function($event) {
+                  return _vm.deleteContact(contact.id)
+                }
+              }
+            },
+            [_vm._v("Delete")]
+          )
+        ])
+      }),
+      0
     )
   ])
 }

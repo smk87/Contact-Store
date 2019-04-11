@@ -32,7 +32,7 @@ Route::group(['middleware' => 'api'], function () {
 
     // Update contact
     Route::patch('contact/{id}', function (Request $request, $id) {
-        contact::findorFail($id)->update(['name' => $request->input(['name']), 'email' => $request->input(['email']), 'phone'->$request->input(['phone'])]);
+        contact::findorFail($id)->update(['name' => $request->input(['name']), 'email' => $request->input(['email']), 'phone' => $request->input(['phone'])]);
     });
 
     // Delete contact
